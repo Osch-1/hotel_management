@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelManagement", "HotelManagement\HotelManagement.csproj", "{14FC2AD5-88A9-4E7A-BAE5-B794815C2CA4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelManagement", "HotelManagement\HotelManagement.csproj", "{14FC2AD5-88A9-4E7A-BAE5-B794815C2CA4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{524F7FBE-65C3-45F4-8145-18D7DC8E7D1B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{524F7FBE-65C3-45F4-8145-18D7DC8E7D1B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{53E3E9E2-B35E-4BAA-8B8C-66762B4BA42E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{524F7FBE-65C3-45F4-8145-18D7DC8E7D1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{524F7FBE-65C3-45F4-8145-18D7DC8E7D1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{524F7FBE-65C3-45F4-8145-18D7DC8E7D1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53E3E9E2-B35E-4BAA-8B8C-66762B4BA42E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53E3E9E2-B35E-4BAA-8B8C-66762B4BA42E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53E3E9E2-B35E-4BAA-8B8C-66762B4BA42E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53E3E9E2-B35E-4BAA-8B8C-66762B4BA42E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

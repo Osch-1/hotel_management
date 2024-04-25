@@ -5,14 +5,20 @@ public class Hotel
     public int Id { get; private init; }
     public string Name { get; private set; }
     public string Address { get; private set; }
-    public DateTime OpenSince { get; private set; }
+    public DateTime OpenSince { get; private init; }
 
-    public Hotel( int id, string name, string address, DateTime openSince )
+    public Hotel( string name, string address, DateTime openSince )
+    {
+        Name = name;
+        Address = address;
+        OpenSince = openSince;
+    }
+
+    public Hotel( int id, string name, string address )
     {
         Id = id;
         Name = name;
         Address = address;
-        OpenSince = openSince;
     }
 
     public void SetName( string name )
@@ -33,5 +39,11 @@ public class Hotel
         }
 
         Address = address;
+    }
+
+    public void CopyFrom( Hotel other )
+    {
+        SetName( other.Name );
+        SetAddress( other.Address );
     }
 }

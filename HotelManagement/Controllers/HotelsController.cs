@@ -1,5 +1,9 @@
 ﻿using Domain.Entities;
+using Domain.Repositories;
 using HotelManagement.Dto;
+using HotelManagement.Lifetimes.Scoped;
+using HotelManagement.Lifetimes.Singletone;
+using HotelManagement.Lifetimes.Transient;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelManagement.Controllers;
@@ -11,12 +15,33 @@ namespace HotelManagement.Controllers;
 // методы http - https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
 public class HotelsController : ControllerBase
 {
-    private static List<Hotel> _hotels;
+    private readonly IHotelRepository _hotelRepository;
+    private readonly ITransientService _transientService;
+    private readonly ISingletonService _singletonService;
+    private readonly IScopedService _scopedService;
+    private readonly IContainer _container;
 
-    // статический конструктор запускается один раз для класса
-    static HotelsController()
+    // DI-контейнер
+    public HotelsController( IContainer scopedContainer, IHotelRepository hotelRepository, ITransientService transientService, ISingletonService singletonService, IScopedService scopedService )
     {
-        _hotels = new();
+        _hotelRepository = hotelRepository;
+        _transientService = transientService;
+        _singletonService = singletonService;
+        _scopedService = scopedService;
+        _container = scopedContainer;
+    }
+
+    [HttpGet( "guids" )]
+    public IActionResult GetGuids()
+    {
+        return Ok( new
+        {
+            fromSingleton = _singletonService.Guid,
+            fromScoped = _scopedService.Guid,
+            scopedFromContainer = _container.ScopedGuid,
+            transient = _transientService.Guid,
+            transientGuidFromContainer = _container.TransientGuid
+        } );
     }
 
     // Http-метод GET
@@ -25,7 +50,9 @@ public class HotelsController : ControllerBase
     [HttpGet( "" )]
     public IActionResult GetHotels()
     {
-        return Ok( _hotels );
+        IReadOnlyList<Hotel> hotels = _hotelRepository.GetAllHotels();
+
+        return Ok( hotels );
     }
 
     // Http-метод POST
@@ -34,10 +61,8 @@ public class HotelsController : ControllerBase
     [HttpPost( "" )]
     public IActionResult CreateHotel( /*Говорим что данные имеют формат CreateHotelRequest и лежат в теле http-запроса*/ [FromBody] CreateHotelRequest request )
     {
-        int id = _hotels.Count + 1;
-        Hotel newHotel = new( id, request.Name, request.Address, request.OpenSince );
-
-        _hotels.Add( newHotel );
+        Hotel hotel = new( request.Name, request.Address, request.OpenSince );
+        _hotelRepository.Save( hotel );
 
         // возвращает http-ответ со статусом 200-ОК
         return Ok();
@@ -48,26 +73,21 @@ public class HotelsController : ControllerBase
     [HttpPut( "{id:int}" )]
     public IActionResult ModifyHotel( [FromRoute] int id, [FromBody] ModifyHotelRequest request )
     {
-        // находим отель который пользователь хочет изменить
-        Hotel hotel = _hotels.FirstOrDefault( h => h.Id == id );
+        // нет валидации
+        // создаем отель, когда на самом деле надо модифицировать
+        // отделение методов по изменению - например изменить только адресс
 
-        // если отеля нет - говорим об этом пользователю
-        if ( hotel is null )
-        {
-            return NotFound();
-        }
-
-        hotel.SetName( request.Name );
-        hotel.SetAddress( request.Address );
-
+        Hotel hotel = new( id, request.Name, request.Address );
+        _hotelRepository.Update( hotel );
         return Ok();
     }
 
     [HttpDelete( "{id:int}" )]
     public IActionResult DeleteHotel( [FromRoute] int id )
     {
-        // todo: implement
-        throw new NotImplementedException();
+        _hotelRepository.Delete( id );
+
+        return Ok();
     }
 }
 
