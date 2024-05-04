@@ -1,9 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Repositories;
 using HotelManagement.Dto;
-using HotelManagement.Lifetimes.Scoped;
-using HotelManagement.Lifetimes.Singletone;
-using HotelManagement.Lifetimes.Transient;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelManagement.Controllers;
@@ -16,32 +13,11 @@ namespace HotelManagement.Controllers;
 public class HotelsController : ControllerBase
 {
     private readonly IHotelRepository _hotelRepository;
-    private readonly ITransientService _transientService;
-    private readonly ISingletonService _singletonService;
-    private readonly IScopedService _scopedService;
-    private readonly IContainer _container;
 
     // DI-контейнер
-    public HotelsController( IContainer scopedContainer, IHotelRepository hotelRepository, ITransientService transientService, ISingletonService singletonService, IScopedService scopedService )
+    public HotelsController( IHotelRepository hotelRepository )
     {
         _hotelRepository = hotelRepository;
-        _transientService = transientService;
-        _singletonService = singletonService;
-        _scopedService = scopedService;
-        _container = scopedContainer;
-    }
-
-    [HttpGet( "guids" )]
-    public IActionResult GetGuids()
-    {
-        return Ok( new
-        {
-            fromSingleton = _singletonService.Guid,
-            fromScoped = _scopedService.Guid,
-            scopedFromContainer = _container.ScopedGuid,
-            transient = _transientService.Guid,
-            transientGuidFromContainer = _container.TransientGuid
-        } );
     }
 
     // Http-метод GET

@@ -21,6 +21,13 @@ public class Hotel
         Address = address;
     }
 
+    /// <summary>
+    /// for ef
+    /// </summary>
+    private Hotel()
+    {
+    }
+
     public void SetName( string name )
     {
         if ( string.IsNullOrWhiteSpace( name ) )
